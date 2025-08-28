@@ -5,8 +5,13 @@ const request = axios.create({
   timeout: 5000
 })
 
-// 添加请求拦截器
+// 添加请求拦截器，在请求发送之前，插入自定义配置
 request.interceptors.request.use((config) => {
+  // 注入token到请求头
+  const token = localStorage.getItem('token_key')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   return config
 }, (error) => {
   return Promise.reject(error)
